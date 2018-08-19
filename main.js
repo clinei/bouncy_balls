@@ -43,8 +43,6 @@ function main() {
     requestAnimationFrame(render);
 
     function render() {
-        
-        step();
 
         const physics_balls = get_physics_balls();
 

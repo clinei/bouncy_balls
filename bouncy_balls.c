@@ -108,26 +108,6 @@ void* get_physics_balls() {
     return physics_balls;
 }
 
-void get_distance_to_point(float x, float y,
-                           float x2, float y2,
-                           float* dx, float* dy,
-                           float * distance) {
-
-    *dx = x2 - x;
-    *dy = y2 - y;
-    *distance = sqrt((*dx)*(*dx) + (*dy)*(*dy));
-}
-void get_direction_to_point(float  x,  float  y,
-                            float  x2, float  y2,
-                            float* dx, float* dy,
-                            float* distance,
-                            float* dir_x, float* dir_y) {
-
-    get_distance_to_point(x, y, x2, y2, dx, dy, distance);
-    *dir_x = (*dx) / (*distance);
-    *dir_y = (*dy) / (*distance);
-}
-
 EMSCRIPTEN_KEEPALIVE
 void init(const int width, const int height) {
 
@@ -161,8 +141,9 @@ void step_physics_balls(float delta) {
                 const float j_y = physics_balls->y[j];
                 const float j_radius = physics_balls->radius[j];
 
-                float dx, dy, distance;
-                get_distance_to_point(x, y, j_x, j_y, &dx, &dy, &distance);
+                const float dx = j_x - x;
+                const float dy = j_y - y;
+                const float distance = sqrt(dx*dx + dy*dy);
 
                 if (distance < radius + j_radius) {
                     const float mid_x = dx / 2;
